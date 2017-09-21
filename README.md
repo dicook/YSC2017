@@ -11,7 +11,7 @@ In preparation for the workshop please install this software on your laptop:
 1. R latest release (Friday 2017-06-30) https://cran.r-project.org
 2. RStudio Desktop 1.0.153 (Open source version) https://www.rstudio.com/products/rstudio/download/#download
 3. R packages: tidyverse, knitr
-4. If you do not yet have one, sign up for an account on github, https://github.com. And check that git is on your computer:
+4. If you do not yet have one, sign up for an account on github, https://github.com. And check that git is on your computer (if it is not installed, come 15 mins earlier to the workshop, and we will get it set up for you):
   - On a Mac: simply open a terminal window and type "git --version".
   - On Windows: All programs => Git
-If it is not installed, come 15 mins earlier to the workshop, and we will get it set up for you.
+
