@@ -15,3 +15,4 @@ In preparation for the workshop please install this software on your laptop:
   - On a Mac: simply open a terminal window and type "git --version".
   - On Windows: All programs => Git
 
+If you are using a Windows laptop, you need to have Administrator access so that we can install new packages on the fly.
