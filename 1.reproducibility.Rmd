@@ -1,0 +1,310 @@
+---
+title: "Young Statisticians Workshop: Developing Your Career to Thrive in a Data-rich, Technology-driven, Reproducible Research Environment"
+subtitle: "Reproducibility"
+author: "Di Cook (dicook@monash.edu, @visnut)"
+date: "25/9/2017"
+output:
+  xaringan::moon_reader:
+    css: ["default", "myremark.css"]
+    self_contained: false
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE, warning = FALSE}
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  error = FALSE, 
+  collapse = TRUE,
+  comment = "",
+  fig.height = 8,
+  fig.width = 12,
+  fig.align = "center",
+  cache = FALSE
+)
+```
+
+
+![](images/Hello-Di.png)
+
+---
+class: inverse middle 
+# Your turn
+
+During the day, there will be times when it is helpful to work together with one or two other participants. Take 2 minutes and introduce yourself to your neighbours!
+
+![](lorikeets.png)
+
+---
+# What we are covering
+
+- Reproducible research, for publications, talks, and web sites
+- Why and how to organise data
+- Making effective plots, grammar of graphics, good practices
+
+---
+# Tools 
+
+- R, RStudio: building a more quantitative world toegther
+- git/github: Collaborative project host and version control system
+- Rmarkdown: a simple language for typesetting
+
+---
+# Why Rmarkdown
+
+- Very simple typesetting language
+- Multiple sophsticated output formats
+- Sophistication is achieved with accompanying style files
+- Keeps code, data and explanations together
+- If data changes, re-run to update results
+
+---
+# Rmarkdown 
+
+- A shift to writing papers in Rmarkdown, where code is embedded, and data linked. WHY? *Many journals require code and data to be submitted with an article, to verify results as part of the review*
+- Homework submissions from statistics classes written and submitted as Rmarkdown. WHY? *Easy to teach, and keeps student work organised*
+- Lecture slides can be written in Rmarkdown. WHY? *Classes typically have code underlying the methods explanations so that students can actively learn the techniques.*
+- A shift in Honours, Masters and PhD theses to be written in Rmarkdown, helps in preparation for publication, good practice for organising work
+- Reports for organisations on data written in Rmarkdown. WHY? *If data is updated, a re-run is all that is required to update the results and report.*
+- Web sites: WHY? *need to be dynamic, and have content like blogs*
+
+
+---
+# Key pieces of Rmarkdown
+
+- yaml: Sets up title, author, date, output type, style
+- Headings: `#`, `##`
+- R code: `{r}`
+- Lists: `-`
+
+---
+# Papers in Rmarkdown
+
+Take a look at the paper "Calendar-based graphics for visualizing people's daily schedules" with materials available at: https://github.com/earowang/paper-calendar-vis
+
+- Paper is written in Rmd
+- Code and data is in directory
+- Submit the pdf, and Rmd, for review, and point to github directory
+
+---
+# Thesis 
+
+.pull-left[
+Rob Hyndman's [Thesis Format for Monash](https://github.com/robjhyndman/MonashThesis) produces nice pdf document.
+
+It uses bookdown to create the document. 
+
+You need latex to create the pdf. Style file is `monashthesis.cls`.
+
+Write in Rmarkdown. Latex snippets make equations.
+
+```
+---
+title: 'Thesis title'
+degreetype: 'Doctor of Philosophy'
+author: 'Jessica Bloggs'
+degrees: 'B.Sc. (Hons), University of Tangambalanga'
+output: bookdown::pdf_book
+site: bookdown::bookdown_site
+link-citations: yes
+knit: "bookdown::render_book"
+---
+```
+]
+
+.pull-right[
+![](images/thesis.png)
+]
+
+---
+# Web sites
+
+.pull-left[
+[useR! 2018](https://user2018.r-project.org)
+
+The web site raw components are at [https://github.com/useR-2018/website](https://github.com/useR-2018/website)
+
+Website is built using [blogdown](https://github.com/rstudio/blogdown) with hugo theme
+
+```
+baseurl = "https://user2018.r-project.org/"
+title = "useR! 2018"
+theme = "hugo-universal-theme"
+...
+
+[menu]
+
+[[menu.main]]
+    name = "Home"
+    url  = "/"
+    weight = 1
+
+[[menu.main]]
+    name = "Programme"
+    url  = "/programme/"
+    weight = 2
+
+```
+]
+
+.pull-right[
+![](images/user2018.png)
+]
+---
+
+.pull-left[
+[Earo Wang](https://earo.me)
+
+Source files are at [https://github.com/earowang/earo.me](https://github.com/earowang/earo.me)
+]
+
+.pull-right[
+![](images/earo.png)
+]
+---
+# Lecture slides
+
+[Monash ETC1010 Data Modelling and Computing](dmac.netlify.com)
+
+![](images/lectures.png)
+
+---
+
+Web site built with blogdown: 
+[ETC1010 web site](https://dmac.netlify.com)
+
+![](images/etc1010.png)
+
+---
+# github
+
+is your best friend!
+
+- Github is a service for coducting collaborative projects
+- has more control and safety checks than Dropbox and Google Docs
+- `git` is the language to interface with github
+- it is possible to have private repos
+- very supportive of academic research
+
+Resources: Thanks Jenny Bryan! [githug](https://github.com/jennybc/githug); [Happy git with R](http://happygitwithr.com); [First time git setup](https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup)
+
+---
+# Let's collaborate
+
+Your overall task for today is to build a guidebook together using bookdown. We'll title it as:
+
+"I reckon ...."
+
+and each of us will contribute a chapter, with a title that finishes the sentence. A chapter can be as little as a paragraph, or a couple of pages, and should contain:
+
+- something that you find useful, important, interesting, ... from the workshop that you think others might also find useful
+- it needs to have some R code, maybe some data, that you weave your point around
+
+---
+# Let's get started
+
+- I will create a github repo for the guidebook
+- I will invite you to collaborate
+- You pull a copy of the repo
+- You add your chapter, that starts with a tentative title, and a couple of sentences introducing yourself
+
+---
+# Getting started with github
+
+From RStudio, start a `New project`, with `Version Control`
+
+![](images/version_control.png)
+
+---
+# git project
+
+Make it a `git` project
+
+![](images/git.png)
+
+---
+# Connect it to github
+
+And provide the address of the github site, to do a *handshake*, so that your computer registers with the repo
+
+
+![](images/github_address.png)
+
+---
+# Using git
+
+
+Three commands, in this order, always!
+- `commit` register your changes with the repo
+- `pull` get the changes from the repo
+- `push` your changes back to the repo
+
+---
+# Config
+
+The first time you connect, in order to push your changes to the github repo may require that you 
+
+```
+githug::git_config_local(user.name = "louise", user.email = "louise@example.org")
+```
+
+---
+# Making your chapter
+
+Open `02-literature.Rmd` and save as `yournumber-title.Rmd`.
+
+Write a few sentences introducing yourself.
+
+---
+# Adding your chapter to the repo
+
+Click on the `git` link in the environment tab. You should see your new chapter as a file that can be added to the repo.
+
+![](images/book_git.png)
+
+---
+
+![](images/book_commit.png)
+
+---
+# Getting everyone else's chapters
+
+`Pull` the changes that others have made, before you `push` your changes.
+
+
+![](images/book_pull.png)
+
+---
+# Now push your changes
+
+`Push` uploads your changes to the remote repo
+
+![](images/book_push.png)
+
+---
+class: inverse middle 
+# Materials from this workshop
+
+- Download a zip copy of the workshop materials
+- Create an R project for this course (separate from the collaborative guidebook project)
+- Open the slides for the second section `2.data.organisation.Rmd` in RStudio, and the `html` in a web browser
+- Follow along with the slides, and run example code 
+
+---
+# Resources
+
+- RStudio IDE [RStudio IDE cheat sheet](https://github.com/rstudio/cheatsheets/raw/master/source/pdfs/rstudio-IDE-cheatsheet.pdf)
+- RMarkdown [cheat sheet](https://github.com/rstudio/cheatsheets/raw/master/source/pdfs/rmarkdown-cheatsheet-2.0.pdf)
+- Q/A site: [http://stackoverflow.com](http://stackoverflow.com)
+- Dynamic Documents with R and knitr [Yihui Xie](http://yihui.name/knitr/)
+- [RStudio community site](https://community.rstudio.com) 
+- [Bookdown](https://bookdown.org/yihui/bookdown/)
+
+---
+class: inverse middle 
+# Share and share alike
+
+This work is licensed under the Creative Commons Attribution-Noncommercial 3.0 United States License. To view a copy of this license, visit http://creativecommons.org/licenses/by-nc/3.0/us/ or send a letter to Creative Commons, 171 Second Street, Suite 300, San Francisco, California, 94105, USA.

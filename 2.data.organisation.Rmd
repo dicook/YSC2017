@@ -1,0 +1,723 @@
+---
+title: "Young Statisticians Workshop: Developing Your Career to Thrive in a Data-rich, Technology-driven, Reproducible Research Environment"
+subtitle: "Organising data"
+author: "Di Cook (dicook@monash.edu, @visnut)"
+date: "25/9/2017"
+output:
+  xaringan::moon_reader:
+    css: ["default", "myremark.css"]
+    self_contained: false
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE, warning = FALSE}
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  error = FALSE, 
+  echo = FALSE, 
+  collapse = TRUE,
+  comment = "",
+  fig.height = 5,
+  fig.width = 8,
+  fig.align = "center",
+  cache = FALSE
+)
+```
+
+```{r}
+library(tidyverse)
+library(gridExtra)
+library(plotly)
+library(ggthemes)
+library(ggmap)
+```
+
+# Overview
+
+- Terminology of statistical data exploration
+- Process of exploring data
+- Tidy vs messy data
+- Tidying data process
+- Wrangling your data
+
+---
+# Exploratory data analysis
+
+"Data science is an exciting discipline that allows you to turn raw data into understanding, insight, and knowledge." [Grolemund and Wickham](http://r4ds.had.co.nz/introduction.html) 
+
+Exploratory data analysis is the stage in the analysis where the analyst "plays in the sand" with their data to see what it has to tell them. It allows us to find the unexpected, and come to some understanding of the information that the data contains. [Cook and Swayne](http://www.ggobi.org/book/)
+
+---
+# Exploring your data, stages
+
+- import
+- tidy
+- transform/wrangle/clean
+- visualise
+- model
+- communicate
+
+---
+# Rectangular data
+
+- Variables are in the columns
+  - A __variable__ is a quantity, quality, or property that you can measure.
+  - A value is the state of a variable when you measure it. The value of a variable may change from measurement to measurement.
+- Observations are in the rows: An __observation__ is a set of measurements made under similar conditions (you usually make all of the measurements in an observation at the same time and on the same object). An observation will contain several values, each associated with a different variable. I’ll sometimes refer to an observation as a data point.
+- __Tabular data__ is a set of values, each associated with a variable and an observation. Tabular data is __tidy__ if each value is placed in its own "cell", each variable in its own column, and each observation in its own row.
+
+---
+# Tidying data
+
+Here are a bunch of examples data sets that have come across my desk. We are going to work out what are the variables and what are the observations, to know what form we need to rearrange the data to get it into tidy form.
+
+---
+# Example 1
+
+What are the variables? Observations?
+
+```{r}
+grad <- read_csv("data/graduate-programs.csv")
+head(grad[c(2,3,4,6)])
+```
+
+Is it in tidy form?
+
+---
+# Example 2 
+
+What are the variables? Observations?
+
+```{r}
+genes <- read_csv("data/genes.csv")
+head(genes)
+```
+
+---
+# Example 3
+
+What are the variables? Observations?
+
+```{r}
+melbtemp <- read.fwf("data/ASN00086282.dly", 
+   c(11, 4, 2, 4, rep(c(5, 1, 1, 1), 31)), fill=T)
+head(melbtemp[,c(1,2,3,4,seq(5,100,4))])
+```
+
+---
+# Example 4
+
+What are the variables? Observations?
+
+```{r}
+tb <- read_csv("data/tb.csv")
+tail(tb)
+```
+
+---
+# Example 5
+
+```{r}
+pew <- read.delim(
+  file = "http://stat405.had.co.nz/data/pew.txt",
+  header = TRUE,
+  stringsAsFactors = FALSE,
+  check.names = F
+)
+pew[1:5, 1:5]
+```
+
+---
+# Example 6
+
+10 week sensory experiment, 12 individuals assessed taste of french fries on several scales (how potato-y, buttery, grassy, rancid, paint-y do they taste?), fried in one of 3 different oils, replicated twice. First few rows:
+
+```{r, echo = FALSE}
+data(french_fries, package = "reshape2")
+head(french_fries, 4)
+```
+
+What is the experimental unit? What are the factors of the experiment? What was measured? What do you want to know?
+
+---
+# Messy data patterns
+
+There are various features of messy data that one can observe in practice. Here are some of the more commonly observed patterns:
+
+- Column headers are values, not variable names
+- Variables are stored in both rows and columns, contingency table format
+- One type of experimental unit stored in multiple tables
+- Dates in many different formats
+- Every messy data set, is messy in its own way
+
+---
+# What is tidy data?
+
+- Each observation forms a row
+- Each variable forms a column
+- Data is contained in a single table
+- Long form makes it easier to reshape in many different ways
+- Wide form is common for analysis
+
+---
+# Tidy
+
+Same pieces, many different constructions (analogy from Hadley Wickham)
+
+![](images/lego1.jpg) 
+![](images/lego2.jpg) 
+![](images/lego3.jpg) 
+![](images/lego4.jpg) 
+![](images/lego5.jpg) 
+
+[Alan Chia/Creative Commons](https://commons.wikimedia.org/wiki/File:Lego_Color_Bricks.jpg),  [dirkb86/Creative Commons](https://www.flickr.com/photos/dirkb86/8446019404/in/set-72157632691207934), 
+[Joris/Creative Commons](https://www.wired.com/2012/08/dear-lego/), 
+[brainbikerider/Creative Commons](https://amodularlife.wordpress.com/2010/07/26/new-sydney-opera-house-lego-set/),
+[Otto Normalverbraucher/Creative Commons](https://commons.wikimedia.org/wiki/File:Lego_Chicago_City_View_2001.jpg)
+
+---
+# Messy 
+
+Specialist pieces, limited options (analogy from Hadley Wickham)
+
+![](images/playmobile1.jpg) [1971markus/Creative Commons](https://commons.wikimedia.org/wiki/File:Playmobil-Ochsenwagen-Modell_im_LWL-Römermuseum_in_Haltern.jpg)
+
+![](images/playmobile2.jpg) [Angela V/Creative Commons](http://www.onesmileymonkey.com/reviews/toys-2/playmobils-adventure-tree-house-pickup-truck/)
+
+---
+# Tidy verbs
+
+- `gather`: specify the **keys** (identifiers) and the **values** (measures) to make long form (used to be called melting)
+- `spread`: variables in columns (used to be called casting)
+- `nest`/`unnest`: working with list variables
+- `separate`/`unite`: split and combine columns
+
+---
+# Tidying the example 2 data
+
+```{r echo=TRUE}
+genes <- read_csv("data/genes.csv")
+head(genes)
+```
+
+---
+# Gather column names into long form
+
+```{r echo=TRUE}
+gather(genes, variable, expr, -id) 
+```
+
+---
+# Separate columns
+
+```{r echo=TRUE}
+genes %>%
+  gather(variable, expr, -id) %>%
+  separate(variable, c("trt", "leftover"), "-") 
+```
+
+---
+
+```{r echo=TRUE}
+genes %>%
+  gather(variable, expr, -id) %>%
+  separate(variable, c("trt", "leftover"), "-") %>%
+  separate(leftover, c("time", "rep"), "\\.") 
+```
+
+---
+
+```{r echo=TRUE}
+gtidy <- genes %>%
+  gather(variable, expr, -id) %>%
+  separate(variable, c("trt", "leftover"), "-") %>%
+  separate(leftover, c("time", "rep"), "\\.") %>%
+  mutate(trt = sub("W", "", trt)) %>%
+  mutate(rep = sub("R", "", rep))
+head(gtidy)
+```
+
+---
+# Make a picture
+
+```{r fig.height=4}
+gmean <- gtidy %>% 
+  group_by(id, trt, time) %>% 
+  summarise(expr = mean(expr))
+ggplot(data = gtidy, aes(trt, expr, colour = time)) + 
+         geom_point() + 
+  xlab("Type of modification") + ylab("Expression") + 
+  facet_wrap(~id) +
+  geom_line(data = gmean, aes(group = time))
+```
+
+---
+# Tidying example 3
+
+```{r echo=TRUE}
+melbtemp <- read.fwf("data/ASN00086282.dly", 
+                     c(11, 4, 2, 4, rep(c(5, 1, 1, 1), 31)), fill=T)
+melbtemp <- melbtemp[,c(1,2,3,4,seq(5,128,4))]
+colnames(melbtemp) <- c("id", "year", "month", "var", paste0("V",1:31))
+head(melbtemp)
+```
+
+---
+
+```{r echo=TRUE}
+melbtemp %>% 
+  gather(day, value, V1:V31) %>%
+  head()
+```
+
+---
+
+```{r echo=TRUE}
+melbtemp %>% 
+  gather(day, value, V1:V31) %>%
+  mutate(day = sub("V", "", day)) %>%
+  head()
+```
+
+---
+
+Missing values have been coded as -9999. Need to recode these as NA.
+
+```{r}
+melbtemp %>% 
+  gather(day, value, V1:V31) %>%
+  mutate(day = sub("V", "", day)) %>%
+  summarise(min=min(value), median=median(value), max=max(value)) 
+```
+
+```{r echo=TRUE}
+melbtemp %>% 
+  gather(day, value, V1:V31) %>%
+  mutate(day = sub("V", "", day)) %>%
+  mutate(value=ifelse(value==-9999, NA, value)) %>%
+  head()
+```
+
+---
+
+There are more variables types that are recognisable:
+
+```{r}
+melbtemp %>% 
+  gather(day, value, V1:V31) %>%
+  mutate(day = sub("V", "", day)) %>%
+  mutate(value=ifelse(value==-9999, NA, value)) %>%
+  count(var)
+```
+
+---
+
+```{r echo=TRUE}
+melbtemp %>% 
+  gather(day, value, V1:V31) %>%
+  mutate(day = sub("V", "", day)) %>%
+  mutate(value=ifelse(value==-9999, NA, value)) %>%
+  filter(var %in% c("PRCP", "TMAX", "TMIN")) %>%
+  head()
+```
+
+---
+
+```{r echo=TRUE}
+melbtemp %>% 
+  gather(day, value, V1:V31) %>%
+  mutate(day = sub("V", "", day)) %>%
+  mutate(value=ifelse(value==-9999, NA, value)) %>%
+  filter(var %in% c("PRCP", "TMAX", "TMIN")) %>%
+  spread(var, value) %>%
+  head()
+```
+
+---
+
+```{r echo=TRUE}
+melbtemp %>% 
+  gather(day, value, V1:V31) %>%
+  mutate(day = sub("V", "", day)) %>%
+  mutate(value=ifelse(value==-9999, NA, value)) %>%
+  filter(var %in% c("PRCP", "TMAX", "TMIN")) %>%
+  spread(var, value) %>%
+  mutate(PRCP=PRCP/10, TMAX=TMAX/10, TMIN=TMIN/10) %>%
+  head()
+```
+
+---
+# Melbourne max temperatures
+
+```{r}
+melbtemp <- melbtemp %>% 
+  gather(day, value, V1:V31) %>%
+  mutate(day = sub("V", "", day)) %>%
+  mutate(value=ifelse(value==-9999, NA, value)) %>%
+  filter(var %in% c("PRCP", "TMAX", "TMIN")) %>%
+  spread(var, value) %>%
+  mutate(PRCP=PRCP/10, TMAX=TMAX/10, TMIN=TMIN/10)
+ggplot(melbtemp, aes(x=year, y=TMAX)) + 
+  geom_smooth(method="lm")
+```
+
+---
+class: inverse middle 
+# Your turn
+
+Tidy the tuberculosis data (example 4) so that it looks like this:
+
+```
+   iso2  year gender   age count
+1    AD  1989      m  1524    NA
+2    AD  1990      m  1524    NA
+3    AD  1991      m  1524    NA
+4    AD  1992      m  1524    NA
+5    AD  1993      m  1524    NA
+6    AD  1994      m  1524    NA
+...
+```
+
+![](lorikeets.png)
+
+
+---
+class: inverse middle 
+# Your turn
+
+Tidy the pew survey data (example 5) so that it looks like:
+
+```
+            religion income count
+1           Agnostic  <$10k    27
+2            Atheist  <$10k    12
+3           Buddhist  <$10k    27
+4           Catholic  <$10k   418
+5 Don’t know/refused  <$10k    15
+6   Evangelical Prot  <$10k   575
+...
+```
+
+![](lorikeets.png)
+
+---
+# Wrangling your data: Verbs
+
+- Filter
+- Arrange
+- Select
+- Mutate
+- Summarise
+- Group/Ungroup
+
+---
+# Filter
+
+Pick observations by their values. For example, 
+
+```
+filter(var %in% c("PRCP", "TMAX", "TMIN"))
+```
+
+took the column named `var` and keeps rows that have one of three values `PRCP`, `TMAX`, `TMIN`. All other rows are removed. 
+
+
+---
+# Arrange
+
+Orders a data frame or tibble by the values in one column
+
+```{r echo=TRUE}
+library(lubridate)
+ordered_nelbtemp <- melbtemp %>% 
+  mutate(date=ymd(paste(year, month, day, sep="-"))) %>%
+  arrange(date)
+```
+
+---
+# Select
+
+Choose some of the __variables__.
+
+```{r echo=TRUE}
+airport <- read_csv("data/airports.csv")
+airport
+```
+
+---
+
+```{r echo=TRUE}
+airport %>%
+  select(AIRPORT, LATITUDE, LONGITUDE, AIRPORT_IS_LATEST, DISPLAY_AIRPORT_NAME)
+```
+
+---
+# Mutate
+
+Create new, or transform existing, variables, e.g. for the Melbourne temperature data, we put the temperature and precipitation values into Celsius and mm, byt dividing by 10.
+
+```
+mutate(PRCP=PRCP/10, TMAX=TMAX/10, TMIN=TMIN/10)
+```
+
+---
+# Summarise
+
+Calculate a quantity on a column, producing a single number, e.g. sample statistics for PRCP:
+
+```{r echo=TRUE}
+melbtemp %>% summarise(m = mean(PRCP, na.rm=TRUE), s = sd(PRCP, na.rm=TRUE), 
+            mx = max(PRCP, na.rm=TRUE), mn = min(PRCP, na.rm=TRUE))
+```
+
+- Stats: `mean()`, `median()`, `sd()`, `min()`, `max()`, `sum()`
+- Rounding: `floor()`, `ceiling()`, `trunc()`, `round()`, `signif()`
+
+---
+# Grouping and ungrouping
+
+Summarise is most commonly called on subgroups of data. We might want to calculate statistics of the weather data across years. 
+
+```{r echo=TRUE}
+melbtemp %>% group_by(year) %>%
+  summarise(m = mean(TMAX, na.rm=TRUE), s = sd(TMAX, na.rm=TRUE), 
+            mx = max(TMAX, na.rm=TRUE), mn = min(TMAX, na.rm=TRUE))
+```
+
+If we want to more operations on the variable `year` after these calculations, you would need to do an `ungroup()` step.
+
+---
+# Melbourne max max temperature
+
+```{r}
+melbtemp %>% group_by(year) %>%
+  summarise(m = mean(TMAX, na.rm=TRUE), s = sd(TMAX, na.rm=TRUE), 
+            mx = max(TMAX, na.rm=TRUE), mn = min(TMAX, na.rm=TRUE)) %>%
+ggplot(aes(x=year, y=mx)) + 
+  geom_point() +
+  geom_smooth(method="lm")
+```
+
+---
+# Putting it together for the french fries
+
+10 week sensory experiment, 12 individuals assessed taste of french fries on several scales (how potato-y, buttery, grassy, rancid, paint-y do they taste?), fried in one of 3 different oils, replicated twice. First few rows:
+
+```{r, echo=FALSE}
+data(french_fries, package = "reshape2")
+french_fries <- as_tibble(french_fries)
+french_fries
+```
+
+---
+# What would we like to know?
+
+- Is the design complete?
+- Are replicates like each other?
+- How do the ratings on the different criteria differ?
+- Are raters giving different scores on average?
+- Do ratings change over the weeks?
+
+Each of these questions involves different summaries of the data.
+
+---
+# Answer some Questions
+
+- Easiest question is whether the ratings are similar on the different scales, potato'y, buttery, grassy, rancid and painty. 
+- We need to gather the data into long form, and make plots facetted by the scale. 
+
+```{r echo=TRUE, fig.height=2.6}
+ff.m <- french_fries %>% 
+  gather(type, rating, -subject, -time, -treatment, -rep)
+ggplot(data=ff.m, aes(x=rating)) + geom_histogram(binwidth=2) + 
+  facet_wrap(~type, ncol=5) 
+```
+
+---
+# Look at it a different way
+
+```{r fig.width=8, fig.height=5}
+ggplot(data=ff.m, aes(x=type, y=rating, fill=type)) + 
+  geom_boxplot()
+```
+
+---
+# Comparison of the distributions of criteria
+
+Ratings on the different criteria are quite different. 
+- Potato'y scores relatively highly. 
+- Grassy are mostly 0's
+- Buttery and painty are skewed right, mostly low values a few high ratings
+- Rancid is quite varied, we would hope that this relates to time, that the chips get more rancid as the weeks go by.
+
+---
+# Do the replicates look like each other?
+
+- We will start to tackle this by plotting the replicates against each other using a scatterplot. 
+- If raters give the same rating to the replicates, we would expect something close to this, then all values would lie on the X=Y line
+- We need to 
+    - gather the data into long form, and 
+    - then get the replicates spread into separate columns. 
+
+---
+
+```{r echo=TRUE}
+ff.s <- ff.m %>% spread(rep, rating)
+head(ff.s)
+```
+
+---
+# Check Replicates
+
+```{r, fig.show='hold', fig.align='default', fig.height=4, fig.width=4}
+ggplot(data=ff.s, aes(x=`1`, y=`2`)) + geom_point() +
+  theme(aspect.ratio=1) + xlab("Rep 1") + ylab("Rep 2")
+ggplot(data=ff.s, aes(x=`1`, y=`2`)) + geom_point() +
+  theme(aspect.ratio=1) + xlab("Rep 1") + ylab("Rep 2") + 
+  scale_x_sqrt() + scale_y_sqrt()
+```
+
+They have some positive linear association, but there is a lot more variation than expected. One rep might have scored 15 and the other 0, that's the same batches, same oil, same criteria, same week, same rater!
+
+---
+# Separately by criteria ...
+
+
+```{r echo=FALSE, fig.width=10, fig.height=4}
+ggplot(data=ff.s, aes(x=`1`, y=`2`)) + geom_point() +
+  theme(aspect.ratio=1) + 
+  xlab("Rep 1") + ylab("Rep 2") + facet_wrap(~type, ncol=5)
+```
+
+buttery and potato'y look a bit better. The rest are still terrible. 
+
+---
+# by oil ...
+
+```{r, echo=FALSE, fig.width=10, fig.height=6}
+ggplot(data=ff.s, aes(x=`1`, y=`2`)) + geom_point() +
+  theme(aspect.ratio=1) + 
+  xlab("Rep 1") + ylab("Rep 2") + facet_grid(treatment~type)
+```
+
+Not much improvement here.
+
+---
+# By subject ...
+
+```{r, echo=FALSE, fig.width=10, fig.height=6}
+ggplot(data=ff.s, aes(x=`1`, y=`2`)) + geom_point() +
+  theme(aspect.ratio=1) + 
+  xlab("Rep 1") + ylab("Rep 2") + facet_wrap(~subject, ncol=4)
+```
+
+Some subjects may be more experienced than others?
+
+---
+
+
+Because the replicates do not look like each other, the quality of the data might be questioned at this point. 
+
+Nevertheless, lets push on with some of the other questions.
+
+---
+# Completeness of experimental design
+
+If the data is complete it should be 12 x 10 x 3 x 2, that is, 6 records for each person. (Assuming that each person rated on all scales.) 
+
+To check this we want to tabulate the number of records for each subject, time and treatment. That is,
+- select appropriate columns, 
+- tabulate, 
+- count and 
+- spread it out to give a nice table.
+
+---
+
+```{r echo=TRUE}
+french_fries %>% 
+  select(subject, time, treatment) %>% 
+  count(subject, time) %>%
+  spread(time, n)
+```
+
+Its pretty good, but subjects, 3, 31, 79, 86 all missed a rating session. 
+
+---
+# By criteria
+
+```{r}
+ff.m %>% 
+  select(subject, time, treatment, type) %>% 
+  count(subject, time) %>%
+  spread(time, n)
+```
+
+---
+# Change in rancid ratings over weeks
+
+- Filter on criteria
+- Compute means by subject, week and oil
+
+```{r echo=TRUE}
+ff.av <- ff.m %>% 
+  filter(type == "rancid") %>%
+  group_by(subject, time, treatment) %>%
+  summarise(rating=mean(rating))
+```
+
+---
+
+```{r fig.width=10, fig.height=6}
+p <- ff.m %>% filter(type == "rancid") %>%
+  ggplot(aes(x=time, y=rating, colour=treatment)) + 
+         geom_point(alpha=0.5) +
+  facet_wrap(~subject) 
+p + geom_line(data=ff.av, aes(group=treatment))
+```
+
+Oh, its awful data! Only subject 86 is seeing the chips get more rancid over time, with maybe oil 1 being worse. Subject 63, shows some trend. Nothing is rancid for subjects 78, 79. Subject 53 thinks they taste better after many weeks in the same old oil!
+
+---
+class: inverse middle 
+# Your turn
+
+For the 2015 OECD PISA data, Australia subset, strip the state out of the STRATUM variable using this code:
+
+```{r eval=FALSE, echo=TRUE}
+load("data/pisa_au.rda")
+pisa_au <- pisa_au %>% mutate(state=as.character(substr(STRATUM, 4, 5)),
+                schtype_yr=as.character(substr(STRATUM, 6, 7))) %>%
+  mutate(state=recode(state, "01"="ACT", "02"="NSW", "03"="VIC",
+       "04"="QLD", "05"="SA", "06"="WA", "07"="TAS", "08"="NT"))
+```
+
+use your wrangling skills to answer these questions:
+
+- Compute the average of math scores by state. Which state does best, on average, on math? (You should use the stuweight variable to compute a weighted average. This is survey data, and the weights indicate how representative that individual is of the population.)
+- Compute the difference in average male and female math scores by state. Which state has the smallest average gender difference?
+- Does test anxiety have an effect math score?
+
+---
+# Summary
+
+- Tidy data is a conceptual framework that helps to be more efficient in data analysis
+- Most analysis tasks can be accomplished using the handful of wrangling verbs
+- Its worth learning!
+
+---
+# Resources
+
+- Data transformation [cheatsheet](https://github.com/rstudio/cheatsheets/raw/master/source/pdfs/data-transformation-cheatsheet.pdf)
+- [Wickham (2007) Reshaping data](https://www.jstatsoft.org/article/view/v021i12/v21i12.pdf)
+- [Wickham (2011) Split-Apply-Combine](https://www.jstatsoft.org/article/view/v040i01)
+- [broom vignettes, David Robinson](https://cran.r-project.org/web/packages/broom/vignettes/broom.html)
+
+---
+class: inverse middle 
+# Share and share alike
+
+This work is licensed under the Creative Commons Attribution-Noncommercial 3.0 United States License. To view a copy of this license, visit http://creativecommons.org/licenses/by-nc/3.0/us/ or send a letter to Creative Commons, 171 Second Street, Suite 300, San Francisco, California, 94105, USA.
