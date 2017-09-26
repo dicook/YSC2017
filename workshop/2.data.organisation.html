@@ -520,6 +520,24 @@ class: inverse middle
 
 Tidy the tuberculosis data (example 4) so that it looks like this:
 
+
+```
+# A tibble: 115,380 x 5
+    iso2  year gender   age count
+ * &lt;chr&gt; &lt;int&gt;  &lt;chr&gt; &lt;chr&gt; &lt;int&gt;
+ 1    AD  1989      m    04    NA
+ 2    AD  1990      m    04    NA
+ 3    AD  1991      m    04    NA
+ 4    AD  1992      m    04    NA
+ 5    AD  1993      m    04    NA
+ 6    AD  1994      m    04    NA
+ 7    AD  1996      m    04    NA
+ 8    AD  1997      m    04    NA
+ 9    AD  1998      m    04    NA
+10    AD  1999      m    04    NA
+# ... with 115,370 more rows
+```
+
 ```
    iso2  year gender   age count
 1    AD  1989      m  1524    NA
@@ -539,6 +557,8 @@ class: inverse middle
 # Your turn
 
 Tidy the pew survey data (example 5) so that it looks like:
+
+
 
 ```
             religion income count
@@ -701,7 +721,7 @@ If we want to more operations on the variable `year` after these calculations, y
 ---
 # Melbourne max max temperature
 
-&lt;img src="2.data.organisation_files/figure-html/unnamed-chunk-30-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="2.data.organisation_files/figure-html/unnamed-chunk-32-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Putting it together for the french fries
@@ -751,12 +771,12 @@ ggplot(data=ff.m, aes(x=rating)) + geom_histogram(binwidth=2) +
   facet_wrap(~type, ncol=5) 
 ```
 
-&lt;img src="2.data.organisation_files/figure-html/unnamed-chunk-32-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="2.data.organisation_files/figure-html/unnamed-chunk-34-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Look at it a different way
 
-&lt;img src="2.data.organisation_files/figure-html/unnamed-chunk-33-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="2.data.organisation_files/figure-html/unnamed-chunk-35-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Comparison of the distributions of criteria
@@ -796,7 +816,7 @@ head(ff.s)
 ---
 # Check Replicates
 
-![](2.data.organisation_files/figure-html/unnamed-chunk-35-1.png)![](2.data.organisation_files/figure-html/unnamed-chunk-35-2.png)
+![](2.data.organisation_files/figure-html/unnamed-chunk-37-1.png)![](2.data.organisation_files/figure-html/unnamed-chunk-37-2.png)
 
 They have some positive linear association, but there is a lot more variation than expected. One rep might have scored 15 and the other 0, that's the same batches, same oil, same criteria, same week, same rater!
 
@@ -804,21 +824,21 @@ They have some positive linear association, but there is a lot more variation th
 # Separately by criteria ...
 
 
-&lt;img src="2.data.organisation_files/figure-html/unnamed-chunk-36-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="2.data.organisation_files/figure-html/unnamed-chunk-38-1.png" style="display: block; margin: auto;" /&gt;
 
 buttery and potato'y look a bit better. The rest are still terrible. 
 
 ---
 # by oil ...
 
-&lt;img src="2.data.organisation_files/figure-html/unnamed-chunk-37-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="2.data.organisation_files/figure-html/unnamed-chunk-39-1.png" style="display: block; margin: auto;" /&gt;
 
 Not much improvement here.
 
 ---
 # By subject ...
 
-&lt;img src="2.data.organisation_files/figure-html/unnamed-chunk-38-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="2.data.organisation_files/figure-html/unnamed-chunk-40-1.png" style="display: block; margin: auto;" /&gt;
 
 Some subjects may be more experienced than others?
 
@@ -905,7 +925,7 @@ ff.av &lt;- ff.m %&gt;%
 
 ---
 
-&lt;img src="2.data.organisation_files/figure-html/unnamed-chunk-42-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="2.data.organisation_files/figure-html/unnamed-chunk-44-1.png" style="display: block; margin: auto;" /&gt;
 
 Oh, its awful data! Only subject 86 is seeing the chips get more rancid over time, with maybe oil 1 being worse. Subject 63, shows some trend. Nothing is rancid for subjects 78, 79. Subject 53 thinks they taste better after many weeks in the same old oil!
 
@@ -927,8 +947,61 @@ pisa_au &lt;- pisa_au %&gt;% mutate(state=as.character(substr(STRATUM, 4, 5)),
 use your wrangling skills to answer these questions:
 
 - Compute the average of math scores by state. Which state does best, on average, on math? (You should use the stuweight variable to compute a weighted average. This is survey data, and the weights indicate how representative that individual is of the population.)
+
+
+```
+# A tibble: 8 x 2
+  state        m
+  &lt;chr&gt;    &lt;dbl&gt;
+1   ACT 505.4857
+2   NSW 494.2584
+3    NT 478.0795
+4   QLD 486.3467
+5    SA 489.3091
+6   TAS 468.9917
+7   VIC 498.6085
+8    WA 503.8274
+# A tibble: 8 x 4
+# Groups:   state [8]
+  state      `1`      `2`        dif
+  &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;
+1   ACT 502.1651 508.7725  -6.607420
+2   NSW 492.0413 496.4775  -4.436208
+3    NT 463.6726 492.1481 -28.475479
+4   QLD 486.8992 485.8188   1.080436
+5    SA 485.8819 492.5379  -6.655965
+6   TAS 466.9742 470.8269  -3.852642
+7   VIC 491.9853 505.2567 -13.271372
+8    WA 501.4735 506.1641  -4.690684
+```
+
 - Compute the difference in average male and female math scores by state. Which state has the smallest average gender difference?
 - Does test anxiety have an effect math score?
+
+
+```
+
+Call:
+lm(formula = math ~ ANXTEST, data = pisa_au, weights = W_FSTUWT)
+
+Weighted Residuals:
+     Min       1Q   Median       3Q      Max 
+-1645.99  -224.24   -29.83   194.74  1467.37 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 498.6578     0.7291  683.92   &lt;2e-16 ***
+ANXTEST     -11.7413     0.7349  -15.98   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 356.3 on 13896 degrees of freedom
+  (632 observations deleted due to missingness)
+Multiple R-squared:  0.01804,	Adjusted R-squared:  0.01797 
+F-statistic: 255.3 on 1 and 13896 DF,  p-value: &lt; 2.2e-16
+```
+
+&lt;img src="2.data.organisation_files/figure-html/unnamed-chunk-47-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Summary

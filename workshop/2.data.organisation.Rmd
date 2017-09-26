@@ -371,6 +371,12 @@ class: inverse middle
 
 Tidy the tuberculosis data (example 4) so that it looks like this:
 
+```{r}
+tb_tidy <- tb %>% gather(var, count, -iso2, -year) %>%
+  separate(var, c("gender", "age"))
+tb_tidy
+```
+
 ```
    iso2  year gender   age count
 1    AD  1989      m  1524    NA
@@ -390,6 +396,10 @@ class: inverse middle
 # Your turn
 
 Tidy the pew survey data (example 5) so that it looks like:
+
+```{r}
+pew_tidy <- pew %>% gather(income, count, -religion)
+```
 
 ```
             religion income count
@@ -687,7 +697,7 @@ class: inverse middle
 
 For the 2015 OECD PISA data, Australia subset, strip the state out of the STRATUM variable using this code:
 
-```{r eval=FALSE, echo=TRUE}
+```{r echo=TRUE}
 load("data/pisa_au.rda")
 pisa_au <- pisa_au %>% mutate(state=as.character(substr(STRATUM, 4, 5)),
                 schtype_yr=as.character(substr(STRATUM, 6, 7))) %>%
@@ -698,8 +708,27 @@ pisa_au <- pisa_au %>% mutate(state=as.character(substr(STRATUM, 4, 5)),
 use your wrangling skills to answer these questions:
 
 - Compute the average of math scores by state. Which state does best, on average, on math? (You should use the stuweight variable to compute a weighted average. This is survey data, and the weights indicate how representative that individual is of the population.)
+
+```{r}
+pisa_au <- pisa_au %>%
+  mutate(math=(PV1MATH+PV2MATH+PV3MATH+PV4MATH+PV5MATH+
+                 PV6MATH+PV7MATH+PV8MATH+PV9MATH+PV10MATH)/10)
+pisa_au %>% group_by(state) %>%
+  summarise(m=weighted.mean(math, W_FSTUWT))
+pisa_au %>% group_by(state, ST004D01T) %>%
+  summarise(m=weighted.mean(math, W_FSTUWT)) %>%
+  spread(ST004D01T, m) %>%
+  mutate(dif = `1`-`2`)
+```
+
 - Compute the difference in average male and female math scores by state. Which state has the smallest average gender difference?
 - Does test anxiety have an effect math score?
+
+```{r}
+fit <- lm(math~ANXTEST, weights=W_FSTUWT, data=pisa_au)
+summary(fit)
+ggplot(pisa_au, aes(x=ANXTEST, y=math)) + geom_point()
+```
 
 ---
 # Summary

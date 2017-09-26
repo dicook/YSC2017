@@ -602,7 +602,7 @@ fly_sub <- fly %>%
 ggplot(fly_sub, 
        aes(x=`In general, is itrude to bring a baby on a plane?`)) + 
   geom_bar(mapping=aes(fill=Gender), position="fill") + 
-  coord_flip() 
+  coord_flip() + scale_fill_brewer(palette="Dark2")
 ```
 
 ---
